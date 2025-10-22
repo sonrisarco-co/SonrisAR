@@ -43,9 +43,8 @@ class Consulta(db.Model):
     tratamiento = db.Column(db.String(200))
     notas = db.Column(db.Text)
 
-@app.before_first_request
-def crear_admin():
-    db.create_all()
+with app.app_context():
+     db.create_all()
     if not Usuario.query.filter_by(usuario='admin').first():
         hashed = bcrypt.generate_password_hash('admin').decode('utf-8')
         db.session.add(Usuario(usuario='admin', password=hashed))
